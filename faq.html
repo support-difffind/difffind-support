@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FAQ — DiffFind Support</title>
+<meta name="description" content="Quick answers to the questions we hear most often about DiffFind." />
+<link rel="icon" type="image/png" href="assets/favicon.png" />
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="brand" href="index.html">
+      <img src="assets/favicon.png" alt="" />
+      DiffFind <span class="support-tag">Support</span>
+    </a>
+    <nav class="site-nav">
+      <a href="getting-started.html">Getting Started</a>
+      <a href="comparing-documents.html">Comparing Documents</a>
+      <a href="ai-semantic-analysis.html">AI Analysis</a>
+      <a href="account-and-settings.html">Account</a>
+      <a href="privacy-and-security.html">Privacy</a>
+      <a href="api-for-developers.html">API</a>
+      <a href="faq.html" class="active">FAQ</a>
+    </nav>
+    <div class="header-spacer"></div>
+    <a class="app-link" href="https://app.diffind.com/" target="_blank" rel="noopener noreferrer">Open DiffFind</a>
+  </div>
+</header>
+
+<main class="article">
+  <div class="breadcrumb"><a href="index.html">Support</a> / FAQ</div>
+
+  <h1>Frequently asked questions</h1>
+  <p class="subtitle">Can't find your answer here? <a href="contact.html">Contact us</a>.</p>
+
+  <div class="faq-category">General</div>
+
+  <details class="faq-item">
+    <summary>Do I need an account to use DiffFind?</summary>
+    <div class="faq-body">No. You can paste content and compare it, including with the default Heuristic AI provider, without signing in. Signing in with Google just saves your AI provider settings to your account so they follow you across devices — see <a href="account-and-settings.html">Account &amp; Settings</a>.</div>
+  </details>
+
+  <details class="faq-item">
+    <summary>Is DiffFind free to use?</summary>
+    <div class="faq-body">There's no billing or subscription in DiffFind today — the deterministic comparison and the Heuristic AI provider are available with no payment required. If you connect a real AI provider (Claude, OpenAI, Gemini), you'll use your own API key with that vendor, subject to their own pricing.</div>
+  </details>
+
+  <details class="faq-item">
+    <summary>What formats does DiffFind support?</summary>
+    <div class="faq-body">Text, JSON, YAML, XML, and CSV (compared structurally), plus PDF via the File loader. Markdown, HTML, and source-code comparison aren't available yet. See <a href="comparing-documents.html#formats">Supported formats</a>.</div>
+  </details>
+
+  <div class="faq-category">Comparing documents</div>
+
+  <details class="faq-item">
+    <summary>Why didn't reordering my JSON keys show up as a change?</summary>
+    <div class="faq-body">JSON, YAML, XML, and CSV are compared structurally — as a parsed value tree, not as text — so key order and formatting never register as a change. Only the actual values changing does. See <a href="comparing-documents.html#formats">Supported formats</a>.</div>
+  </details>
+
+  <details class="faq-item">
+    <summary>Can I compare two PDFs against each other?</summary>
+    <div class="faq-body">Yes — load both sides via the File loader. When both are PDF-sourced, Compare highlights changes directly on the rendered pages instead of the usual line-based view. See <a href="comparing-documents.html#pdf">Comparing PDFs</a>.</div>
+  </details>
+
+  <details class="faq-item">
+    <summary>The content I loaded from a URL or curl command is one unreadable line — what now?</summary>
+    <div class="faq-body">Turn on <strong>Pretty print</strong> in the toolbar. It reformats minified JSON/YAML/XML/CSV into readable, indented text, and your original content is preserved underneath — unchecking it restores it exactly. See <a href="comparing-documents.html#pretty-print">Pretty print</a>.</div>
+  </details>
+
+  <details class="faq-item">
+    <summary>A CSV change doesn't have a clickable line number — is that a bug?</summary>
+    <div class="faq-body">No, that's a known current limitation. Text, JSON, YAML, and XML changes all jump to an exact source line when you click a change card; CSV changes carry a path (e.g. row 3's <code>price</code> column) but don't have that line-lookup yet.</div>
+  </details>
+
+  <details class="faq-item">
+    <summary>Can I mix sources — say, a URL on one side and pasted text on the other?</summary>
+    <div class="faq-body">Yes. Each Before/After panel has its own independent loader (Plain, URL, curl, or File), so you can mix and match freely.</div>
+  </details>
+
+  <div class="faq-category">AI semantic analysis</div>
+
+  <details class="faq-item">
+    <summary>Do I need an API key to get AI explanations of my changes?</summary>
+    <div class="faq-body">No. The default Heuristic provider generates interpretations without any key or network call. An API key is only needed if you choose a real provider (Claude, OpenAI, or Gemini) for potentially deeper analysis. See <a href="ai-semantic-analysis.html#providers">Choosing a provider</a>.</div>
+  </details>
+
+  <details class="faq-item">
+    <summary>Why did my comparison fail with an error instead of just showing a result?</summary>
+    <div class="faq-body">If you're using a real AI provider, a malformed or off-schema response from that vendor fails loudly rather than silently guessing, and a failure to reach the vendor's API (bad key, rate limit, network issue) surfaces as its own error. This is deliberate — DiffFind would rather show you an error than a quietly-wrong interpretation.</div>
+  </details>
+
+  <details class="faq-item">
+    <summary>What does it mean when a change is shown as "unverified"?</summary>
+    <div class="faq-body">Every AI interpretation is checked against your source documents for factual values it cites (numbers, dates, percentages, etc.). "Unverified" means a cited value wasn't actually found in your source — treat that interpretation with extra scrutiny. See <a href="ai-semantic-analysis.html#verification">Verification</a>.</div>
+  </details>
+
+  <div class="faq-category">Account &amp; data</div>
+
+  <details class="faq-item">
+    <summary>Is my compared content stored on DiffFind's servers?</summary>
+    <div class="faq-body">No, not beyond what's needed to generate the response. Your comparison history and options are saved only in your own browser. See <a href="privacy-and-security.html">Privacy &amp; Security</a>.</div>
+  </details>
+
+  <details class="faq-item">
+    <summary>How is my AI provider API key protected?</summary>
+    <div class="faq-body">If you're signed in, it's encrypted at rest and only ever decrypted to serve your own requests. If you're not signed in, it stays in your browser's local storage and is sent only with your own requests. See <a href="privacy-and-security.html#api-keys">API keys</a>.</div>
+  </details>
+
+  <details class="faq-item">
+    <summary>How do I delete my account or data?</summary>
+    <div class="faq-body">There's no self-service delete button yet — <a href="contact.html">contact us</a> from the email address on your account and we'll take care of it.</div>
+  </details>
+
+  <div class="next-steps">
+    <a href="getting-started.html">
+      <span class="label">Guide</span>
+      Getting started with DiffFind
+    </a>
+    <a href="contact.html">
+      <span class="label">Still stuck?</span>
+      Contact support
+    </a>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <span>&copy; <span id="year"></span> DiffFind</span>
+    <nav>
+      <a href="https://difffind.com" target="_blank" rel="noopener noreferrer">difffind.com</a>
+      <a href="privacy-and-security.html">Privacy</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</footer>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+
+</body>
+</html>

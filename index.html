@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DiffFind Support</title>
+<meta name="description" content="Help center for DiffFind — the deterministic diff engine with optional AI semantic analysis. Guides for comparing documents, AI analysis, accounts, and the API." />
+<link rel="icon" type="image/png" href="assets/favicon.png" />
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="brand" href="index.html">
+      <img src="assets/favicon.png" alt="" />
+      DiffFind <span class="support-tag">Support</span>
+    </a>
+    <nav class="site-nav">
+      <a href="getting-started.html">Getting Started</a>
+      <a href="comparing-documents.html">Comparing Documents</a>
+      <a href="ai-semantic-analysis.html">AI Analysis</a>
+      <a href="account-and-settings.html">Account</a>
+      <a href="privacy-and-security.html">Privacy</a>
+      <a href="api-for-developers.html">API</a>
+      <a href="faq.html">FAQ</a>
+    </nav>
+    <div class="header-spacer"></div>
+    <a class="app-link" href="https://app.diffind.com/" target="_blank" rel="noopener noreferrer">Open DiffFind</a>
+  </div>
+</header>
+
+<main class="page">
+  <div class="hero">
+    <h1>How can we help?</h1>
+    <p>Guides and answers for comparing documents, AI semantic analysis, your account, and the DiffFind API.</p>
+    <div class="search-box">
+      <input type="text" id="topic-search" placeholder="Search support topics, e.g. &ldquo;API key&rdquo; or &ldquo;PDF&rdquo;" autocomplete="off" />
+    </div>
+  </div>
+
+  <div class="card-grid" id="topic-grid">
+    <a class="card" href="getting-started.html" data-keywords="start begin new first compare quick overview">
+      <span class="icon">🚀</span>
+      <h3>Getting Started</h3>
+      <p>What DiffFind does, and how to run your first comparison.</p>
+    </a>
+    <a class="card" href="comparing-documents.html" data-keywords="compare formats json yaml xml csv pdf url curl file loader inline diff minimap history pretty print find move options">
+      <span class="icon">🔍</span>
+      <h3>Comparing Documents</h3>
+      <p>Formats, loaders, options, the inline diff view, and PDF comparison.</p>
+    </a>
+    <a class="card" href="ai-semantic-analysis.html" data-keywords="ai semantic analysis heuristic claude openai gemini provider model verification interpretation severity confidence custom instructions">
+      <span class="icon">✨</span>
+      <h3>AI Semantic Analysis</h3>
+      <p>Turning changes into plain-language interpretations, and choosing a provider.</p>
+    </a>
+    <a class="card" href="account-and-settings.html" data-keywords="account sign in google login logout settings api key provider credential">
+      <span class="icon">👤</span>
+      <h3>Account &amp; Settings</h3>
+      <p>Signing in, managing provider API keys, and where your settings live.</p>
+    </a>
+    <a class="card" href="privacy-and-security.html" data-keywords="privacy security data key encryption storage ssrf delete">
+      <span class="icon">🔒</span>
+      <h3>Privacy &amp; Security</h3>
+      <p>What DiffFind stores, how API keys are protected, and how to request deletion.</p>
+    </a>
+    <a class="card" href="api-for-developers.html" data-keywords="api rest endpoint compare locate load format openapi swagger docs agent tools mcp">
+      <span class="icon">⚙️</span>
+      <h3>API &amp; Developers</h3>
+      <p>REST endpoints, the OpenAPI document, and agent-operable tool functions.</p>
+    </a>
+    <a class="card" href="faq.html" data-keywords="faq questions troubleshoot problem error not working">
+      <span class="icon">💬</span>
+      <h3>FAQ</h3>
+      <p>Quick answers to the questions we hear most often.</p>
+    </a>
+    <a class="card" href="contact.html" data-keywords="contact support help email report bug feedback">
+      <span class="icon">📩</span>
+      <h3>Contact Us</h3>
+      <p>Still stuck? Get in touch and we'll help you out.</p>
+    </a>
+  </div>
+  <p class="no-results" id="no-results">No topics match your search. Try a different term, or <a href="contact.html">contact us</a>.</p>
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <span>&copy; <span id="year"></span> DiffFind</span>
+    <nav>
+      <a href="https://difffind.com" target="_blank" rel="noopener noreferrer">difffind.com</a>
+      <a href="privacy-and-security.html">Privacy</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const input = document.getElementById('topic-search');
+  const cards = Array.from(document.querySelectorAll('#topic-grid .card'));
+  const noResults = document.getElementById('no-results');
+
+  input.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase();
+    let visible = 0;
+    cards.forEach((card) => {
+      const haystack = (card.textContent + ' ' + (card.dataset.keywords || '')).toLowerCase();
+      const match = q === '' || haystack.includes(q);
+      card.hidden = !match;
+      if (match) visible += 1;
+    });
+    noResults.classList.toggle('visible', visible === 0);
+  });
+</script>
+
+</body>
+</html>

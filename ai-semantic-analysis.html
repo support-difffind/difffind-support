@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI Semantic Analysis — DiffFind Support</title>
+<meta name="description" content="How DiffFind's optional AI layer interprets changes, how to choose a provider, and how verification keeps it honest." />
+<link rel="icon" type="image/png" href="assets/favicon.png" />
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="brand" href="index.html">
+      <img src="assets/favicon.png" alt="" />
+      DiffFind <span class="support-tag">Support</span>
+    </a>
+    <nav class="site-nav">
+      <a href="getting-started.html">Getting Started</a>
+      <a href="comparing-documents.html">Comparing Documents</a>
+      <a href="ai-semantic-analysis.html" class="active">AI Analysis</a>
+      <a href="account-and-settings.html">Account</a>
+      <a href="privacy-and-security.html">Privacy</a>
+      <a href="api-for-developers.html">API</a>
+      <a href="faq.html">FAQ</a>
+    </nav>
+    <div class="header-spacer"></div>
+    <a class="app-link" href="https://app.diffind.com/" target="_blank" rel="noopener noreferrer">Open DiffFind</a>
+  </div>
+</header>
+
+<main class="article">
+  <div class="breadcrumb"><a href="index.html">Support</a> / AI Semantic Analysis</div>
+
+  <h1>AI semantic analysis</h1>
+  <p class="subtitle">Turning a raw diff into a plain-language explanation — and keeping that explanation honest.</p>
+
+  <div class="toc">
+    <div class="toc-title">On this page</div>
+    <ul>
+      <li><a href="#what-it-adds">What semantic analysis adds</a></li>
+      <li><a href="#analysis-modes">Analysis modes</a></li>
+      <li><a href="#providers">Choosing a provider</a></li>
+      <li><a href="#api-keys">Where your API key goes</a></li>
+      <li><a href="#custom-instructions">Custom instructions</a></li>
+      <li><a href="#verification">Verification: keeping the AI honest</a></li>
+    </ul>
+  </div>
+
+  <h2 id="what-it-adds">What semantic analysis adds</h2>
+  <p>
+    Deterministic comparison always runs first and tells you exactly <em>what</em> changed. Turning
+    on semantic analysis runs an AI layer on top of that deterministic result and adds, for each
+    change:
+  </p>
+  <ul>
+    <li>An <strong>interpretation</strong> — a plain-language sentence describing what the change means (e.g. "The deadline changed from 30 to 15 days, shortened by 15 days.").</li>
+    <li>A <strong>type</strong> — one of <code>requirement_change</code>, <code>value_change</code>, <code>deadline_change</code>, <code>obligation_change</code>, <code>permission_change</code>, <code>restriction_change</code>, <code>addition</code>, <code>removal</code>, <code>contradiction</code>, <code>breaking_change</code>, or <code>informational_change</code>.</li>
+    <li>A <strong>severity</strong> and <strong>confidence</strong> score.</li>
+    <li>A <strong>verification</strong> result — see <a href="#verification">below</a>.</li>
+  </ul>
+  <p>
+    Semantic analysis never rewrites the deterministic result — it only annotates it. The raw diff
+    you'd get with semantic analysis off is always exactly what's underneath.
+  </p>
+
+  <h2 id="analysis-modes">Analysis modes</h2>
+  <p>The Analysis dropdown in the toolbar picks one of three modes:</p>
+  <ul>
+    <li><strong>Semantic + Lexical</strong> (default) — shows both the raw diff and the AI interpretation.</li>
+    <li><strong>Lexical</strong> — skips the AI call entirely. Deterministic-only, no API key needed.</li>
+    <li><strong>Semantic</strong> — the deterministic diff still runs behind the scenes (semantic analysis needs it to have something to annotate), but the UI hides the raw lexical diff and type/granularity badges in favor of the AI interpretation alone. This is often the more useful view for a PDF comparison, where character-level positions don't line up as cleanly with the source document.</li>
+  </ul>
+  <p>Find-in-text stays available regardless of which mode you're in.</p>
+
+  <h2 id="providers">Choosing a provider</h2>
+  <p>
+    Open the gear icon (top right) to open <strong>Settings</strong> and pick which AI provider
+    powers semantic analysis:
+  </p>
+  <table>
+    <thead><tr><th>Provider</th><th>API key needed?</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Heuristic</strong> (default)</td><td>No</td><td>A deterministic, rule-based classifier. No network call, no key, and results are stable across runs.</td></tr>
+      <tr><td><strong>Claude</strong></td><td>Yes</td><td>Uses Anthropic's models via forced tool use, so the response always matches the expected structure.</td></tr>
+      <tr><td><strong>OpenAI</strong></td><td>Yes</td><td>Uses OpenAI's models via forced function calling.</td></tr>
+      <tr><td><strong>Gemini</strong></td><td>Yes</td><td>Uses Google's models via forced function calling.</td></tr>
+    </tbody>
+  </table>
+  <p>
+    Each provider has its own model dropdown and API key field, and its own slot in your saved
+    settings — switching providers never mixes one vendor's key into another's field. A status pill
+    next to the Analysis dropdown always shows which provider/model is currently active, and doubles
+    as a shortcut back into Settings.
+  </p>
+  <p>
+    If a real provider's response doesn't match the expected structure, or the request to that
+    vendor's API fails (bad key, rate limit, network issue), the comparison fails loudly rather than
+    silently falling back to a guess — you'll see an error instead of a quietly-wrong answer.
+  </p>
+
+  <h2 id="api-keys">Where your API key goes</h2>
+  <p>How your key is stored depends on whether you're signed in:</p>
+  <ul>
+    <li>
+      <strong>Signed in</strong> — your key is encrypted and stored against your account, so it's
+      available the next time you sign in from any device. See
+      <a href="account-and-settings.html#provider-keys">Account &amp; Settings</a> for how to add,
+      replace, or remove it.
+    </li>
+    <li>
+      <strong>Not signed in</strong> — your key stays only in your browser's local storage and is
+      sent with each comparison request from that browser. It never leaves your device except in
+      that request.
+    </li>
+  </ul>
+  <p>
+    Either way, a key is only ever used for <em>your</em> requests, is never echoed back to you in
+    full after you save it (Settings shows a short hint instead), and is only sent onward to the
+    vendor you chose it for.
+  </p>
+
+  <h2 id="custom-instructions">Custom instructions</h2>
+  <p>
+    The <strong>AI focus</strong> field next to the Analysis dropdown accepts free-text guidance
+    (up to 2,000 characters) that's appended to every prompt for whichever real provider you've
+    chosen — for example, "focus on pricing changes." It steers what the AI pays attention to, but
+    never overrides the verification step below, and it's disabled in Lexical mode and ignored by
+    the Heuristic provider, since neither makes an AI call to steer.
+  </p>
+
+  <h2 id="verification">Verification: keeping the AI honest</h2>
+  <p>
+    Every interpretation — heuristic or from a real provider — passes through a verification step.
+    DiffFind extracts the factual values an interpretation cites (numbers, percentages, dates,
+    currency, identifiers, URLs) and confirms each one actually appears in that change's evidence or
+    your source documents. If an interpretation references a value found nowhere in your source, it's
+    flagged as unverified, with the offending value and a reason shown alongside it.
+  </p>
+  <p>This is what keeps AI output trustworthy: a plausible-sounding but fabricated number gets caught rather than shown as fact, regardless of which vendor produced it.</p>
+
+  <div class="next-steps">
+    <a href="account-and-settings.html">
+      <span class="label">Guide</span>
+      Managing your provider API keys
+    </a>
+    <a href="privacy-and-security.html">
+      <span class="label">Guide</span>
+      How your key and data are protected
+    </a>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <span>&copy; <span id="year"></span> DiffFind</span>
+    <nav>
+      <a href="https://difffind.com" target="_blank" rel="noopener noreferrer">difffind.com</a>
+      <a href="privacy-and-security.html">Privacy</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</footer>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+
+</body>
+</html>

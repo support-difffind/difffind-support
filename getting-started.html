@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Getting Started — DiffFind Support</title>
+<meta name="description" content="What DiffFind does and how to run your first comparison." />
+<link rel="icon" type="image/png" href="assets/favicon.png" />
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="brand" href="index.html">
+      <img src="assets/favicon.png" alt="" />
+      DiffFind <span class="support-tag">Support</span>
+    </a>
+    <nav class="site-nav">
+      <a href="getting-started.html" class="active">Getting Started</a>
+      <a href="comparing-documents.html">Comparing Documents</a>
+      <a href="ai-semantic-analysis.html">AI Analysis</a>
+      <a href="account-and-settings.html">Account</a>
+      <a href="privacy-and-security.html">Privacy</a>
+      <a href="api-for-developers.html">API</a>
+      <a href="faq.html">FAQ</a>
+    </nav>
+    <div class="header-spacer"></div>
+    <a class="app-link" href="https://app.diffind.com/" target="_blank" rel="noopener noreferrer">Open DiffFind</a>
+  </div>
+</header>
+
+<main class="article">
+  <div class="breadcrumb"><a href="index.html">Support</a> / Getting Started</div>
+
+  <h1>Getting started with DiffFind</h1>
+  <p class="subtitle">What it does, and how to run your first comparison in under a minute.</p>
+
+  <div class="toc">
+    <div class="toc-title">On this page</div>
+    <ul>
+      <li><a href="#what-is-difffind">What is DiffFind?</a></li>
+      <li><a href="#first-comparison">Your first comparison</a></li>
+      <li><a href="#loading-content">Loading content without copy-pasting</a></li>
+      <li><a href="#reading-results">Reading the results</a></li>
+      <li><a href="#next-steps">Where to go next</a></li>
+    </ul>
+  </div>
+
+  <h2 id="what-is-difffind">What is DiffFind?</h2>
+  <p>
+    DiffFind compares two pieces of content — text, JSON, YAML, XML, CSV, or PDF — and shows you
+    exactly what changed. It's built in two layers:
+  </p>
+  <ul>
+    <li>
+      <strong>Deterministic comparison</strong> runs first, always, and is never overwritten by AI
+      output. It's the same character/word/line diff for plain text, and a structural,
+      path-based diff for JSON/YAML/XML/CSV — so reordering keys or reformatting whitespace never
+      shows up as a false change.
+    </li>
+    <li>
+      <strong>AI semantic analysis</strong> is optional and runs on top of the deterministic
+      result. It explains what a change <em>means</em> in plain language (a deadline changed, a
+      requirement was removed, a value increased) — and every factual value it cites is checked
+      against your source documents before it's shown as verified. See
+      <a href="ai-semantic-analysis.html">AI Semantic Analysis</a>.
+    </li>
+  </ul>
+
+  <h2 id="first-comparison">Your first comparison</h2>
+  <ol>
+    <li>Open <a href="https://app.diffind.com/" target="_blank" rel="noopener noreferrer">app.diffind.com</a>.</li>
+    <li>Paste your original content into the <strong>Before</strong> panel, and the updated content into <strong>After</strong>.</li>
+    <li>Click <strong>Compare</strong>.</li>
+  </ol>
+  <p>
+    That's it — no account or API key is required. DiffFind auto-detects the format (JSON is
+    checked first, then XML, then YAML, then CSV, falling back to plain text), so you don't need
+    to tell it what you pasted.
+  </p>
+  <div class="callout note">
+    <strong>Want an AI explanation of the changes, not just the raw diff?</strong>
+    Turn on semantic analysis in the Analysis dropdown before comparing — see
+    <a href="ai-semantic-analysis.html">AI Semantic Analysis</a> for how to pick a provider.
+  </div>
+
+  <h2 id="loading-content">Loading content without copy-pasting</h2>
+  <p>
+    Each Before/After panel has a loader dropdown (default <strong>Plain</strong>) so you don't
+    have to hand-copy content:
+  </p>
+  <ul>
+    <li><strong>URL</strong> — fetches a GET request and loads the response body.</li>
+    <li><strong>curl</strong> — paste a full curl command; it's parsed and executed for you, and the response body is loaded.</li>
+    <li><strong>File</strong> — reads a local file directly in your browser, including <strong>.pdf</strong> files.</li>
+  </ul>
+  <p>
+    Full details, including how PDF comparison works, are in
+    <a href="comparing-documents.html">Comparing Documents</a>.
+  </p>
+
+  <h2 id="reading-results">Reading the results</h2>
+  <p>After you compare, you'll see two things:</p>
+  <ul>
+    <li>
+      An <strong>inline diff</strong> view — your two documents side by side, line-numbered, with
+      changed lines tinted and the exact changed characters darkened within each line.
+    </li>
+    <li>
+      A list of <strong>change cards</strong> below it, one per change, each showing its type
+      (addition, deletion, modification, or move) and — if semantic analysis is on — an AI
+      interpretation, severity, and confidence. Click a card to jump straight to that change in
+      the panes above.
+    </li>
+  </ul>
+  <p>
+    Use the <strong>Show</strong> filter bar to hide/show change types, and the find bar above the
+    panels to search the raw text you're about to compare.
+  </p>
+
+  <h2 id="next-steps">Where to go next</h2>
+  <div class="next-steps">
+    <a href="comparing-documents.html">
+      <span class="label">Guide</span>
+      Comparing documents in depth — formats, options, PDFs, history
+    </a>
+    <a href="ai-semantic-analysis.html">
+      <span class="label">Guide</span>
+      AI semantic analysis — providers, API keys, verification
+    </a>
+    <a href="account-and-settings.html">
+      <span class="label">Guide</span>
+      Account &amp; settings — signing in and saving your setup
+    </a>
+    <a href="api-for-developers.html">
+      <span class="label">Guide</span>
+      Using the REST API directly
+    </a>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <span>&copy; <span id="year"></span> DiffFind</span>
+    <nav>
+      <a href="https://difffind.com" target="_blank" rel="noopener noreferrer">difffind.com</a>
+      <a href="privacy-and-security.html">Privacy</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</footer>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+
+</body>
+</html>

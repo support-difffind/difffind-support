@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Privacy &amp; Security — DiffFind Support</title>
+<meta name="description" content="What DiffFind stores, how API keys and documents are handled, and how to request deletion of your data." />
+<link rel="icon" type="image/png" href="assets/favicon.png" />
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="brand" href="index.html">
+      <img src="assets/favicon.png" alt="" />
+      DiffFind <span class="support-tag">Support</span>
+    </a>
+    <nav class="site-nav">
+      <a href="getting-started.html">Getting Started</a>
+      <a href="comparing-documents.html">Comparing Documents</a>
+      <a href="ai-semantic-analysis.html">AI Analysis</a>
+      <a href="account-and-settings.html">Account</a>
+      <a href="privacy-and-security.html" class="active">Privacy</a>
+      <a href="api-for-developers.html">API</a>
+      <a href="faq.html">FAQ</a>
+    </nav>
+    <div class="header-spacer"></div>
+    <a class="app-link" href="https://app.diffind.com/" target="_blank" rel="noopener noreferrer">Open DiffFind</a>
+  </div>
+</header>
+
+<main class="article">
+  <div class="breadcrumb"><a href="index.html">Support</a> / Privacy &amp; Security</div>
+
+  <h1>Privacy &amp; security</h1>
+  <p class="subtitle">What DiffFind does and doesn't store, and how your API keys are protected.</p>
+
+  <div class="callout note">
+    <strong>This page describes how the product is built, not a legal privacy policy.</strong>
+    For the full policy and terms, or for anything not covered here, <a href="contact.html">contact us</a>.
+  </div>
+
+  <div class="toc">
+    <div class="toc-title">On this page</div>
+    <ul>
+      <li><a href="#your-documents">Your compared documents</a></li>
+      <li><a href="#files-and-pdfs">Files and PDFs</a></li>
+      <li><a href="#api-keys">API keys</a></li>
+      <li><a href="#session">Your sign-in session</a></li>
+      <li><a href="#ai-vendors">What AI providers see</a></li>
+      <li><a href="#requesting-deletion">Requesting deletion</a></li>
+    </ul>
+  </div>
+
+  <h2 id="your-documents">Your compared documents</h2>
+  <p>
+    The Before/After content you compare is sent to DiffFind's server to run the comparison, and —
+    if you've turned on semantic analysis with a real AI provider — passed to that provider to
+    generate an interpretation. It is not stored server-side beyond what's needed to serve that
+    response.
+  </p>
+  <p>
+    <strong>History</strong> and your comparison options are kept in your browser's local storage
+    only, not on DiffFind's servers — clearing your browser data clears them too.
+  </p>
+
+  <h2 id="files-and-pdfs">Files and PDFs</h2>
+  <p>
+    Files you load with the <strong>File</strong> loader, including PDFs, are read directly in your
+    browser — the raw file is not uploaded anywhere to be loaded into the comparison. A PDF's pages
+    are rendered and its text extracted locally in your browser via pdf.js; that extracted text is
+    what gets sent for comparison, the same as if you'd pasted it. A History entry sourced from a
+    file restores only the previously extracted text, not the original file — the raw bytes are
+    never kept anywhere to re-read.
+  </p>
+
+  <h2 id="api-keys">API keys</h2>
+  <p>How a provider API key you add is protected depends on where it's stored:</p>
+  <ul>
+    <li><strong>Signed-in accounts</strong> — your key is encrypted at rest and can only be decrypted for your own requests. Settings only ever shows a short hint of a saved key, never the key itself.</li>
+    <li><strong>Not signed in</strong> — your key stays in your browser's local storage and is sent only with your own comparison requests from that browser.</li>
+  </ul>
+  <p>Either way, your key is only ever sent onward to the AI vendor you chose it for, to run the semantic analysis you requested — never to any other vendor, and never to another user's requests.</p>
+
+  <h2 id="session">Your sign-in session</h2>
+  <p>
+    Signing in with Google creates a session identified by a secure, signed cookie — it doesn't
+    carry your Google password or any Google credential, just enough for DiffFind to recognize your
+    account on later requests. Signing out clears it.
+  </p>
+
+  <h2 id="ai-vendors">What AI providers see</h2>
+  <p>
+    When semantic analysis runs with a real provider (Claude, OpenAI, or Gemini), the relevant
+    change content and your API key for that provider are sent to that vendor's API to generate the
+    interpretation. That exchange is governed by the vendor's own terms and privacy policy, not
+    DiffFind's — choose the <strong>Heuristic</strong> provider if you'd rather nothing leave
+    DiffFind's own server at all. See <a href="ai-semantic-analysis.html#providers">Choosing a
+    provider</a>.
+  </p>
+
+  <h2 id="requesting-deletion">Requesting deletion</h2>
+  <p>
+    To have your account, saved provider keys, or other associated data deleted,
+    <a href="contact.html">contact us</a> from the email address on your account. See also
+    <a href="account-and-settings.html#account-deletion">Account &amp; Settings</a>.
+  </p>
+
+  <div class="next-steps">
+    <a href="account-and-settings.html">
+      <span class="label">Guide</span>
+      Managing your account and provider keys
+    </a>
+    <a href="contact.html">
+      <span class="label">Guide</span>
+      Get in touch with a question
+    </a>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <span>&copy; <span id="year"></span> DiffFind</span>
+    <nav>
+      <a href="https://difffind.com" target="_blank" rel="noopener noreferrer">difffind.com</a>
+      <a href="privacy-and-security.html">Privacy</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</footer>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+
+</body>
+</html>

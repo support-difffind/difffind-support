@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Account &amp; Settings — DiffFind Support</title>
+<meta name="description" content="Signing in with Google, managing provider API keys, and where your settings are saved." />
+<link rel="icon" type="image/png" href="assets/favicon.png" />
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="brand" href="index.html">
+      <img src="assets/favicon.png" alt="" />
+      DiffFind <span class="support-tag">Support</span>
+    </a>
+    <nav class="site-nav">
+      <a href="getting-started.html">Getting Started</a>
+      <a href="comparing-documents.html">Comparing Documents</a>
+      <a href="ai-semantic-analysis.html">AI Analysis</a>
+      <a href="account-and-settings.html" class="active">Account</a>
+      <a href="privacy-and-security.html">Privacy</a>
+      <a href="api-for-developers.html">API</a>
+      <a href="faq.html">FAQ</a>
+    </nav>
+    <div class="header-spacer"></div>
+    <a class="app-link" href="https://app.diffind.com/" target="_blank" rel="noopener noreferrer">Open DiffFind</a>
+  </div>
+</header>
+
+<main class="article">
+  <div class="breadcrumb"><a href="index.html">Support</a> / Account &amp; Settings</div>
+
+  <h1>Account &amp; settings</h1>
+  <p class="subtitle">Signing in, managing your AI provider connections, and what's saved where.</p>
+
+  <div class="toc">
+    <div class="toc-title">On this page</div>
+    <ul>
+      <li><a href="#do-i-need-an-account">Do I need an account?</a></li>
+      <li><a href="#signing-in">Signing in with Google</a></li>
+      <li><a href="#provider-keys">Managing provider API keys</a></li>
+      <li><a href="#default-settings">Your default analysis settings</a></li>
+      <li><a href="#signing-out">Signing out</a></li>
+      <li><a href="#account-deletion">Deleting your account or data</a></li>
+    </ul>
+  </div>
+
+  <h2 id="do-i-need-an-account">Do I need an account?</h2>
+  <p>
+    No. You can compare documents, including with the Heuristic AI provider, without signing in.
+    Signing in mainly buys you one thing: your AI provider settings (which provider/model you use,
+    and any API keys you've added) are saved to your account instead of just your current browser,
+    so they follow you across devices and browser sessions.
+  </p>
+
+  <h2 id="signing-in">Signing in with Google</h2>
+  <p>
+    Click <strong>Log in</strong> in the top right of the app. DiffFind uses Google sign-in only —
+    there's no separate DiffFind password to create or remember. After you approve access, you're
+    signed in and your name/avatar appear where the login button was.
+  </p>
+
+  <h2 id="provider-keys">Managing provider API keys</h2>
+  <p>
+    Open the gear icon to open <strong>Settings</strong>. Each real AI provider (Claude, OpenAI,
+    Gemini) has its own section:
+  </p>
+  <ul>
+    <li><strong>Add or replace a key</strong> — paste it into that provider's API key field. It saves automatically; there's no separate Save button.</li>
+    <li><strong>Check what's connected</strong> — a configured provider shows a short hint instead of the full key, since the full key is never sent back to your browser once saved.</li>
+    <li><strong>Remove a key</strong> — clear that provider's connection from the same panel to stop using it.</li>
+  </ul>
+  <p>
+    See <a href="ai-semantic-analysis.html#api-keys">where your key is stored</a> and
+    <a href="privacy-and-security.html">how it's protected</a> for the details behind this.
+  </p>
+
+  <h2 id="default-settings">Your default analysis settings</h2>
+  <p>
+    Settings also remembers which provider/model you last picked and whether semantic analysis is
+    on by default, so you don't have to reconfigure it on every visit. Comparison options that
+    aren't provider-related (Case sensitive, Normalize whitespace, Detect moves, Format, and the
+    Show filters) are saved per-browser rather than per-account.
+  </p>
+
+  <h2 id="signing-out">Signing out</h2>
+  <p>
+    Click <strong>Log out</strong> where your name/avatar appear. This ends your signed-in session
+    on that browser; your saved provider connections and settings are still there the next time you
+    sign back in.
+  </p>
+
+  <h2 id="account-deletion">Deleting your account or data</h2>
+  <p>
+    There's no self-service "delete account" button yet. To have your account, saved provider
+    keys, and associated data removed, <a href="contact.html">contact us</a> from the email address
+    associated with your account and we'll take care of it.
+  </p>
+
+  <div class="next-steps">
+    <a href="ai-semantic-analysis.html">
+      <span class="label">Guide</span>
+      Choosing an AI provider and model
+    </a>
+    <a href="privacy-and-security.html">
+      <span class="label">Guide</span>
+      How your data and API keys are protected
+    </a>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <span>&copy; <span id="year"></span> DiffFind</span>
+    <nav>
+      <a href="https://difffind.com" target="_blank" rel="noopener noreferrer">difffind.com</a>
+      <a href="privacy-and-security.html">Privacy</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</footer>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+
+</body>
+</html>

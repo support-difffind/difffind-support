@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>API &amp; Developers — DiffFind Support</title>
+<meta name="description" content="DiffFind's REST endpoints, the OpenAPI document, Swagger UI, and agent-operable tool functions." />
+<link rel="icon" type="image/png" href="assets/favicon.png" />
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="brand" href="index.html">
+      <img src="assets/favicon.png" alt="" />
+      DiffFind <span class="support-tag">Support</span>
+    </a>
+    <nav class="site-nav">
+      <a href="getting-started.html">Getting Started</a>
+      <a href="comparing-documents.html">Comparing Documents</a>
+      <a href="ai-semantic-analysis.html">AI Analysis</a>
+      <a href="account-and-settings.html">Account</a>
+      <a href="privacy-and-security.html">Privacy</a>
+      <a href="api-for-developers.html" class="active">API</a>
+      <a href="faq.html">FAQ</a>
+    </nav>
+    <div class="header-spacer"></div>
+    <a class="app-link" href="https://app.diffind.com/" target="_blank" rel="noopener noreferrer">Open DiffFind</a>
+  </div>
+</header>
+
+<main class="article">
+  <div class="breadcrumb"><a href="index.html">Support</a> / API &amp; Developers</div>
+
+  <h1>API &amp; developers</h1>
+  <p class="subtitle">Everything the DiffFind UI does is available directly from a REST API.</p>
+
+  <div class="toc">
+    <div class="toc-title">On this page</div>
+    <ul>
+      <li><a href="#docs">Interactive docs</a></li>
+      <li><a href="#compare">POST /v1/compare</a></li>
+      <li><a href="#locate">POST /v1/locate</a></li>
+      <li><a href="#load">POST /v1/load</a></li>
+      <li><a href="#format">POST /v1/format</a></li>
+      <li><a href="#health">GET /health</a></li>
+      <li><a href="#agent-tools">Agent-operable tools</a></li>
+    </ul>
+  </div>
+
+  <h2 id="docs">Interactive docs</h2>
+  <p>
+    <code>GET /openapi.json</code> serves the full OpenAPI 3.0 document, generated from the same
+    schemas that validate requests at runtime, so it can't drift from what the API actually accepts.
+    <code>GET /docs</code> serves an interactive Swagger UI over that same document, where you can
+    browse every endpoint's request/response shape and call <code>/v1/compare</code> directly from
+    the page.
+  </p>
+
+  <h2 id="compare">POST /v1/compare</h2>
+  <p>The core endpoint. Compares <code>before</code> and <code>after</code> content and returns the changes.</p>
+  <pre><code>curl -s -X POST https://app.diffind.com/v1/compare \
+  -H 'Content-Type: application/json' \
+  -d '{"before": "Payment is due within 30 days.", "after": "Payment is due within 15 days.", "options": {"semantic": true}}'</code></pre>
+  <p><strong>Key <code>options</code> fields:</strong></p>
+  <table>
+    <thead><tr><th>Field</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>lexical</code></td><td><code>true</code></td><td>Run deterministic comparison.</td></tr>
+      <tr><td><code>semantic</code></td><td><code>false</code></td><td>Run AI semantic analysis on top of the deterministic changes.</td></tr>
+      <tr><td><code>format</code></td><td>auto</td><td><code>"text"</code>, <code>"json"</code>, <code>"yaml"</code>, <code>"xml"</code>, or <code>"csv"</code>.</td></tr>
+      <tr><td><code>caseSensitive</code></td><td><code>true</code></td><td>Case-sensitive comparison.</td></tr>
+      <tr><td><code>normalizeWhitespace</code></td><td><code>false</code></td><td>Collapse whitespace runs before comparing.</td></tr>
+      <tr><td><code>detectMoves</code></td><td><code>true</code></td><td>Best-effort detection of relocated content.</td></tr>
+      <tr><td><code>llm</code></td><td>heuristic</td><td><code>{ provider: "heuristic" | "claude" | "openai" | "gemini", model?, apiKey? }</code></td></tr>
+      <tr><td><code>customInstructions</code></td><td>none</td><td>Free-text guidance for the AI prompt (max 2000 chars). Ignored when <code>semantic</code> is false or the provider is heuristic.</td></tr>
+    </tbody>
+  </table>
+  <p>
+    JSON, YAML, XML, and CSV are compared structurally — the response's <code>lexical.path</code>
+    is an RFC 6901 JSON Pointer (e.g. <code>/timeout</code>, or <code>/0/age</code> for a CSV cell)
+    instead of a text range. See <a href="ai-semantic-analysis.html">AI Semantic Analysis</a> for
+    what the <code>semantic</code> block on each change contains, including verification.
+  </p>
+
+  <h2 id="locate">POST /v1/locate</h2>
+  <p>
+    Maps every RFC 6901 path a structural (json/yaml/xml) comparison can produce to the 0-indexed
+    source line it occurs on, for both sides. This is what the app uses to jump a change card to its
+    exact location; it's exposed as its own endpoint since it's useful to any client rendering its
+    own view of a structural diff.
+  </p>
+  <pre><code>curl -s -X POST https://app.diffind.com/v1/locate \
+  -H 'Content-Type: application/json' \
+  -d '{"before": "{\"timeout\": 500}", "after": "{\"timeout\": 200}", "granularity": "json"}'</code></pre>
+  <p>
+    Returns <code>null</code> for either side when <code>granularity</code> isn't
+    <code>"json"</code>/<code>"yaml"</code>/<code>"xml"</code>, or when that side failed to parse —
+    treat either as "no exact location available." CSV isn't covered by this endpoint yet.
+  </p>
+
+  <h2 id="load">POST /v1/load</h2>
+  <p>Fetches document content server-side for use as compare input — either a GET request to a URL, or a full curl command.</p>
+  <pre><code>curl -s -X POST https://app.diffind.com/v1/load \
+  -H 'Content-Type: application/json' \
+  -d '{"source": "url", "url": "https://api.example.com/config"}'</code></pre>
+  <div class="callout warn">
+    <strong>This endpoint fetches whatever URL or curl command it's given.</strong>
+    Treat it like any other server-side-fetch surface: only point it at sources you trust, and
+    don't build an integration that lets untrusted input reach it unfiltered.
+  </div>
+
+  <h2 id="format">POST /v1/format</h2>
+  <p>Pretty-prints JSON/YAML/XML/CSV content. Best-effort: content that isn't valid for its format comes back unchanged with <code>changed: false</code> rather than an error.</p>
+  <pre><code>curl -s -X POST https://app.diffind.com/v1/format \
+  -H 'Content-Type: application/json' \
+  -d '{"content": "{\"a\":1,\"b\":2}"}'</code></pre>
+
+  <h2 id="health">GET /health</h2>
+  <p>Liveness check: <code>{ "status": "ok", "uptimeSeconds": 12.3 }</code>.</p>
+
+  <h2 id="agent-tools">Agent-operable tools</h2>
+  <p>
+    Beyond the raw HTTP API, DiffFind exposes the same engine as a small set of typed,
+    agent-operable tool functions with no hidden state — the shape an MCP server would wrap
+    directly:
+  </p>
+  <ul>
+    <li><code>compareText({ before, after, options })</code> — forces text-mode comparison.</li>
+    <li><code>compareDocuments({ before, after, options })</code> — auto-detects text vs. JSON/YAML/XML/CSV.</li>
+    <li><code>findMaterialChanges({ before, after })</code> — "Did anything materially change?"</li>
+    <li><code>detectBreakingChanges({ before, after })</code> — "Did this introduce a breaking change?"</li>
+    <li><code>findDeadlineChanges({ before, after })</code> — "Did any deadlines change?"</li>
+    <li><code>findNumericalChanges({ before, after })</code> — "Did any numerical requirements change?"</li>
+  </ul>
+
+  <div class="next-steps">
+    <a href="ai-semantic-analysis.html">
+      <span class="label">Guide</span>
+      What the semantic analysis response contains
+    </a>
+    <a href="contact.html">
+      <span class="label">Guide</span>
+      Report an API issue
+    </a>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <span>&copy; <span id="year"></span> DiffFind</span>
+    <nav>
+      <a href="https://difffind.com" target="_blank" rel="noopener noreferrer">difffind.com</a>
+      <a href="privacy-and-security.html">Privacy</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</footer>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Comparing Documents — DiffFind Support</title>
+<meta name="description" content="Formats, loaders, options, the inline diff view, minimap, history, and PDF comparison in DiffFind." />
+<link rel="icon" type="image/png" href="assets/favicon.png" />
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="brand" href="index.html">
+      <img src="assets/favicon.png" alt="" />
+      DiffFind <span class="support-tag">Support</span>
+    </a>
+    <nav class="site-nav">
+      <a href="getting-started.html">Getting Started</a>
+      <a href="comparing-documents.html" class="active">Comparing Documents</a>
+      <a href="ai-semantic-analysis.html">AI Analysis</a>
+      <a href="account-and-settings.html">Account</a>
+      <a href="privacy-and-security.html">Privacy</a>
+      <a href="api-for-developers.html">API</a>
+      <a href="faq.html">FAQ</a>
+    </nav>
+    <div class="header-spacer"></div>
+    <a class="app-link" href="https://app.diffind.com/" target="_blank" rel="noopener noreferrer">Open DiffFind</a>
+  </div>
+</header>
+
+<main class="article">
+  <div class="breadcrumb"><a href="index.html">Support</a> / Comparing Documents</div>
+
+  <h1>Comparing documents</h1>
+  <p class="subtitle">Formats, comparison options, loaders, and the inline diff view in detail.</p>
+
+  <div class="toc">
+    <div class="toc-title">On this page</div>
+    <ul>
+      <li><a href="#formats">Supported formats</a></li>
+      <li><a href="#options">Comparison options</a></li>
+      <li><a href="#loaders">Loading content: URL, curl, and File</a></li>
+      <li><a href="#pretty-print">Pretty print</a></li>
+      <li><a href="#pdf">Comparing PDFs</a></li>
+      <li><a href="#inline-diff">The inline diff view</a></li>
+      <li><a href="#change-cards">Change cards and jump-to-line</a></li>
+      <li><a href="#find">Finding text before you compare</a></li>
+      <li><a href="#history">History</a></li>
+    </ul>
+  </div>
+
+  <h2 id="formats">Supported formats</h2>
+  <p>
+    DiffFind compares <strong>Text</strong>, <strong>JSON</strong>, <strong>YAML</strong>,
+    <strong>XML</strong>, <strong>CSV</strong>, and <strong>PDF</strong> (via the File loader).
+    Format is auto-detected — JSON is checked first, then XML, then YAML, then CSV, falling back
+    to plain text — or you can force one with the Format dropdown.
+  </p>
+  <p>
+    JSON, YAML, XML, and CSV are all compared <strong>structurally</strong>, not as raw text: each
+    is parsed into a value tree and the trees are diffed against each other. That means:
+  </p>
+  <ul>
+    <li>Reordering object keys never shows up as a change.</li>
+    <li>Reformatting (indentation, quoting style, line breaks) never shows up as a change.</li>
+    <li>Every change carries a path to exactly where it happened — for example <code>/server/limits/maxConnections</code> for JSON/YAML/XML, or <code>/3/price</code> (row 3's <code>price</code> column) for CSV.</li>
+  </ul>
+  <p>
+    Even when you paste JSON/YAML/XML/CSV, you still get the line-numbered <a href="#inline-diff">inline diff</a> view too — it always runs its own plain-text comparison alongside the structural one, so you get both views without switching the Format dropdown.
+  </p>
+
+  <h2 id="options">Comparison options</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Default</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td>Case sensitive</td><td>On</td><td>Treats differently-cased text as a change.</td></tr>
+      <tr><td>Normalize whitespace</td><td>Off</td><td>Collapses whitespace runs before comparing, so whitespace-only differences don't show up as changes.</td></tr>
+      <tr><td>Detect moves</td><td>On</td><td>Best-effort detection of content that was relocated rather than edited, shown as its own change type.</td></tr>
+      <tr><td>Format</td><td>Auto</td><td>Forces Text / JSON / YAML / XML / CSV instead of auto-detecting.</td></tr>
+    </tbody>
+  </table>
+  <p>Every option — plus the Analysis mode and the Show filters below — is remembered in your browser and restored the next time you visit. <strong>Reset</strong> in the toolbar clears everything, including Before/After content, back to defaults.</p>
+
+  <h2 id="loaders">Loading content: URL, curl, and File</h2>
+  <p>Each Before/After panel has a loader dropdown next to it:</p>
+  <ul>
+    <li><strong>Plain</strong> (default) — type or paste directly into the textarea.</li>
+    <li><strong>URL</strong> — runs a GET request and loads the response body. This happens server-side, so the target doesn't need to allow cross-origin requests from DiffFind.</li>
+    <li><strong>curl</strong> — paste a full curl command (e.g. <code>curl -X POST '...' -H '...' -d '...'</code>); it's parsed and executed server-side, and the response body becomes your comparison input.</li>
+    <li><strong>File</strong> — reads a local file directly in your browser (no server round trip), including <code>.pdf</code> files — see <a href="#pdf">Comparing PDFs</a>.</li>
+  </ul>
+  <div class="callout warn">
+    <strong>URL and curl loading fetch whatever address you give them, from DiffFind's server.</strong>
+    Only point them at URLs and commands you trust — don't paste one you got from someone else without checking it first.
+  </div>
+
+  <h2 id="pretty-print">Pretty print</h2>
+  <p>
+    The <strong>Pretty print</strong> checkbox in the toolbar reformats minified JSON/YAML/XML/CSV
+    into readable, indented text — useful right after a curl/URL load, which often arrives as one
+    unreadable line. Checking it reformats whatever's currently in Before/After and keeps
+    auto-reformatting anything loaded afterward while it stays checked. Unchecking it restores each
+    side's exact original content — nothing is lost, only hidden while formatted. It's disabled
+    when Format is forced to Text, and it's a no-op on content that isn't valid for its format.
+  </p>
+
+  <h2 id="pdf">Comparing PDFs</h2>
+  <p>
+    Pick a local <code>.pdf</code> via the <strong>File</strong> loader and DiffFind renders it in
+    your browser, extracts the text from every page, and compares that extracted text exactly as
+    if you'd pasted it directly. PDF loading is File-only — URL/curl sources don't support PDFs.
+  </p>
+  <p>
+    When <strong>both</strong> Before and After are PDF-sourced, Compare draws the diff directly on
+    the rendered pages instead of the usual text view: each changed word or phrase is highlighted
+    right where it appears (red on Before, green on After, gray for a detected move). The change
+    cards below still show each change's type and AI interpretation, but the line-based inline diff
+    pane is hidden for this case, since extracted PDF text has no real line structure to show there.
+    Comparing one PDF against typed or pasted text keeps the normal text-diff view.
+  </p>
+  <p>Find-in-text and the scroll-sync minimap both work the same way against rendered PDF pages as they do against plain textareas.</p>
+
+  <h2 id="inline-diff">The inline diff view</h2>
+  <p>
+    After a comparison, the inline diff renders your full Before/After documents side by side,
+    line-numbered. Every changed line gets a light full-row tint (red on the left, green on the
+    right), and within that line, a character-level diff darkens only the exact characters that
+    differ — so <code>"price": 159.0</code> → <code>"price": 179.0</code> tints the whole line but
+    darkens only the digit that changed. Pure additions/deletions and moved text get their own
+    highlight colors, called out in the legend above the view.
+  </p>
+  <p>
+    The two panes scroll together, each keeping its own scrollbar. A thin minimap next to each pane
+    shows a tick for every changed line at its true position in the document, plus a rectangle for
+    your current viewport — click anywhere in it to jump straight there. Both the textareas and the
+    diff panes also have a shared drag handle underneath them to resize both sides of a pair
+    together, in addition to each element's own native corner-resize.
+  </p>
+
+  <h2 id="change-cards">Change cards and jump-to-line</h2>
+  <p>
+    Each change card shows the line(s) it occurs on and is clickable — clicking scrolls both inline
+    panes to that change with a brief highlight flash. Text changes jump to their exact line;
+    structural (JSON/YAML/XML) changes are mapped from their path to a source line automatically, so
+    the jump lands correctly even when a field name or value repeats elsewhere in the document. CSV
+    changes carry a path too, but don't yet get a clickable line number.
+  </p>
+  <p>
+    A small ▾ / ▸ toggle on each card collapses its old/new values and semantic detail, leaving just
+    the type/severity badges — the click-to-locate behavior still works while collapsed.
+  </p>
+  <p>
+    The <strong>Show</strong> filter bar (Additions / Deletions / Modifications / Moves) hides a
+    type's cards and its highlighting in the inline panes together, so the two views never disagree
+    about what's shown. The summary counts above it always reflect the full, unfiltered comparison.
+  </p>
+
+  <h2 id="find">Finding text before you compare</h2>
+  <p>
+    The find bar above the two panels searches the raw text you're about to compare — not the
+    results — and highlights matches directly over the Before/After content as you type. A scope
+    selector (Both / Before / After) controls where it searches: with a single side selected you get
+    one running match count with Previous/Next; with <strong>Both</strong>, each side tracks its own
+    match and count, and Previous/Next steps them together in lockstep. This is entirely
+    client-side — nothing is sent to the server.
+  </p>
+
+  <h2 id="history">History</h2>
+  <p>
+    The <strong>History</strong> dropdown recalls your last 10 unique comparisons, stored in your
+    browser. Picking a past entry restores each side the way it was originally loaded — plain text
+    is set directly, a file's cached content is restored, and a URL/curl entry re-runs that same
+    load fresh rather than replaying stale output. If Pretty print reformatted a side, history keeps
+    what you actually typed or loaded, not the reformatted version. Re-running an identical pair
+    moves the existing entry to the top instead of duplicating it, and <strong>Clear history</strong>
+    empties it.
+  </p>
+
+  <div class="next-steps">
+    <a href="ai-semantic-analysis.html">
+      <span class="label">Next</span>
+      Add AI semantic analysis on top of your comparisons
+    </a>
+    <a href="api-for-developers.html">
+      <span class="label">Guide</span>
+      Do all of this from the REST API instead
+    </a>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <span>&copy; <span id="year"></span> DiffFind</span>
+    <nav>
+      <a href="https://difffind.com" target="_blank" rel="noopener noreferrer">difffind.com</a>
+      <a href="privacy-and-security.html">Privacy</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</footer>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+
+</body>
+</html>
