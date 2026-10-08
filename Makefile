@@ -5,7 +5,7 @@ DL_DIR  := releases/downloads/$(VERSION)
 NOTES   := releases/release-notes/$(VERSION).md
 ASSETS  := $(DL_DIR)/DiffFind-mac-arm64.dmg $(DL_DIR)/DiffFind-mac-x64.dmg $(DL_DIR)/DiffFind-windows-x64.exe $(DL_DIR)/SHA256SUMS.txt
 
-.PHONY: help verify release release-status
+.PHONY: help verify release releases release-status
 
 help:
 	@echo "verify          Check installers against SHA256SUMS.txt"
@@ -24,3 +24,5 @@ release: verify
 
 release-status:
 	gh release list --repo $(REPO)
+
+releases: release
