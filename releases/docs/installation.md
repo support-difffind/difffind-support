@@ -4,7 +4,7 @@ DiffFind Desktop runs entirely on your computer. Your documents are never upload
 
 ## macOS
 
-1. Download the file for your Mac: **`DiffFind-mac-arm64.dmg`** for Apple Silicon (M1 and later) or **`DiffFind-mac-x64.dmg`** for Intel Macs. (Apple menu → About This Mac shows which you have.)
+1. Download **`DiffFind-mac-arm64.dmg`**. DiffFind for Mac runs on **Apple Silicon (M1 and later) only**; Intel Macs are not supported. (Apple menu → About This Mac shows your chip: it should say Apple M1, M2, M3 or later, not Intel.)
 2. Open the `.dmg` and drag **DiffFind** into **Applications**.
 3. Start DiffFind from Applications.
 

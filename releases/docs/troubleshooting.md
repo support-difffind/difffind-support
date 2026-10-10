@@ -12,8 +12,8 @@ Your trial has ended and no license is active. Basic text comparison is still av
 **Semantic Find is slow the first time.**
 It downloads a small embedding model (once) into the app's data folder. After that it works offline.
 
-**Semantic Find does not work on an Intel Mac.**
-Known limitation of the current build.
+**It will not open on my Mac ("you can't use this version of the application with this Mac").**
+DiffFind for Mac supports Apple Silicon (M1 and later) only. Check Apple menu → About This Mac; if it says Intel, use the Windows version on a Windows PC or the web app at the DiffFind website instead.
 
 **My license key is rejected.**
 Copy the whole key with no spaces or line breaks. "Not valid yet" means your computer's clock is set well in the past; "expired" means a time-limited key has lapsed.
